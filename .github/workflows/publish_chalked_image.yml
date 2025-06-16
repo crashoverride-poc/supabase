@@ -13,7 +13,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            supabase/studio
+            ${{ secrets.AWS_ECR_PREFIX }}/supabase/studio
           flavor: |
             latest=true
           tags: |
