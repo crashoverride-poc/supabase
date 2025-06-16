@@ -4,24 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  settings:
-    runs-on: ubuntu-latest
-    outputs:
-      image_version: ${{ steps.meta.outputs.version }}
-    steps:
-      - id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: |
-            ${{ secrets.AWS_ECR_PREFIX }}/supabase/studio
-          flavor: |
-            latest=true
-          tags: |
-            type=sha,prefix={{date 'YYYY.MM.DD'}}-sha-,enable=${{ github.event_name == 'schedule' }}
-            type=sha,prefix={{date 'YYYY.MM.DD'}}-sha-,enable=${{ github.event_name == 'workflow_dispatch' }}
-
   release_x86:
-    needs: settings
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -36,9 +19,9 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            supabase/studio
+            ${{ secrets.AWS_ECR_PREFIX }}/supabase/studio
           tags: |
-            type=raw,value=${{ needs.settings.outputs.image_version }}_${{ env.arch }}
+            type=raw,value=latest
 
       - name: Setup Chalk
         uses: crashappsec/setup-chalk-action@main
