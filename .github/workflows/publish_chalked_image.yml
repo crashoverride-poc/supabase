@@ -71,12 +71,3 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-  publish:
-    needs:
-      - settings
-    # Call workflow explicitly because events from actions cannot trigger more actions
-    uses: ./.github/workflows/mirror.yml
-    with:
-      version: ${{ needs.settings.outputs.image_version }}
-    secrets: inherit
